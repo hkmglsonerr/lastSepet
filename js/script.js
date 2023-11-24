@@ -5,19 +5,48 @@ let sepet = [];
 
 let localItem = localStorage.getItem("sepet");
 
+let toplamSepet = 0;
+
 if (localItem) {
   sepet = JSON.parse(localItem);
-  // console.log(sepet)
-  span.textContent = sepet.length;
-}
-// localStorage.clear()
-// console.log(urunler)
+  sepet.forEach((urun) => {
+    toplamSepet += urun.quantity;
+  });
 
-console.log(window.location.href);
-console.log(sepet.length);
+  span.textContent = toplamSepet;
+}
+// localStorage.clear();
 
 if (window.location.href == "http://127.0.0.1:5500/index.html") {
   const row = document.querySelector(".row");
+
+  //!Arama kısmını yapıcaz
+  const input = document.getElementById("input");
+  input.addEventListener("input", (element) => {
+    let kullaniciDeger = element.target.value.toLowerCase();
+    const col = document.querySelectorAll(".col-12");
+
+    for (let i = 0; i < col.length; i++) {
+      let urunAdi =
+        col[
+          i
+        ].firstChild.firstChild.nextSibling.firstChild.textContent.toLowerCase();
+
+      let urunAciklama =
+        col[
+          i
+        ].firstChild.firstChild.nextSibling.firstChild.nextSibling.textContent.toLowerCase();
+
+      if (
+        urunAdi.indexOf(kullaniciDeger) != -1 ||
+        urunAciklama.indexOf(kullaniciDeger) != -1
+      ) {
+        col[i].style.display = "flex";
+      } else {
+        col[i].style.display = "none";
+      }
+    }
+  });
 
   urunler.forEach((urun) => {
     // console.log(urun)
@@ -80,8 +109,13 @@ if (window.location.href == "http://127.0.0.1:5500/index.html") {
         sepet.push(urun);
       }
 
+      let toplam = 0;
+      sepet.forEach((element) => {
+        toplam += element.quantity;
+      });
+
       localStorage.setItem("sepet", JSON.stringify(sepet));
-      span.textContent = sepet.length;
+      span.textContent = toplam;
     });
 
     cardBody.append(baslik);
