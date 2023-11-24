@@ -20,7 +20,7 @@ if (localItem) {
 }
 // localStorage.clear();
 
-if (window.location.href == "http://127.0.0.1:5500/index.html") {
+if (window.location.href == "https://hkmglsonerr.github.io/lastSepet/") {
   const row = document.querySelector(".row");
 
   //!Arama kısmını yapıcaz
@@ -134,7 +134,7 @@ if (window.location.href == "http://127.0.0.1:5500/index.html") {
 
     row.append(col);
   });
-} else if (window.location.href == "http://127.0.0.1:5500/sepet.html") {
+} else if (window.location.href == "https://hkmglsonerr.github.io/lastSepet/") {
   const container = document.querySelector(".container");
 
   if (sepet.length == 0) {
