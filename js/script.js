@@ -12,8 +12,11 @@ if (localItem) {
   sepet.forEach((urun) => {
     toplamSepet += urun.quantity;
   });
-
-  span.textContent = toplamSepet;
+  if (sepet.length == 0) {
+    span.textContent = " ";
+  } else {
+    span.textContent = toplamSepet;
+  }
 }
 // localStorage.clear();
 
@@ -167,7 +170,7 @@ if (window.location.href == "http://127.0.0.1:5500/index.html") {
 
       const price = document.createElement("p");
       let urununFiyati = urun.fiyat * urun.quantity;
-      price.textContent = urununFiyati + "$";
+      price.textContent = urununFiyati.toFixed(2) + "$";
       price.style.fontWeight = "bold";
 
       const kacTane = document.createElement("div");
@@ -186,10 +189,15 @@ if (window.location.href == "http://127.0.0.1:5500/index.html") {
       arttirBtn.textContent = "+";
       arttirBtn.classList.add("btn", "btn-light");
 
+      //* azalt butonu başlangıcı
+
       azaltBtn.addEventListener("click", function () {
         if (urun.quantity >= 1) {
           urun.quantity--;
           sayi.textContent = urun.quantity;
+          price.textContent = (urun.fiyat * urun.quantity).toFixed(2) + "$";
+
+          localStorage.setItem("sepet", JSON.stringify(sepet));
 
           if (urun.quantity == 0) {
             // console.log(this.parentElement.parentElement)
@@ -203,16 +211,57 @@ if (window.location.href == "http://127.0.0.1:5500/index.html") {
             localStorage.setItem("sepet", JSON.stringify(sepet));
             //! LocalStorage'dan silme
           }
+          let toplam = 0;
+          sepet.forEach((e) => {
+            toplam += e.quantity;
+          });
+          if (sepet.length == 0) {
+            span.textContent = " ";
+          } else {
+            span.textContent = toplam;
+          }
         }
+        if (sepet.length == 0) {
+          const h4 = document.createElement("h4");
+          h4.textContent = "Sepetinizde Ürün Yok...";
+
+          container.append(h4);
+          container.removeChild(hr);
+        }
+        let toplamSepetFiyati = 0;
+        sepet.forEach((e) => {
+          toplamSepetFiyati += e.fiyat * e.quantity;
+        });
+        sepetFiyat.textContent = toplamSepetFiyati.toFixed(2) + "$";
       });
 
+      //* azalt butonu bitişi
+
+      /////////////////////////////////////////////////
+
+      //* arttır butonu başlangıcı
       arttirBtn.addEventListener("click", () => {
         urun.quantity++;
         sayi.textContent = urun.quantity;
+        price.textContent = (urun.fiyat * urun.quantity).toFixed(2) + "$";
+
+        localStorage.setItem("sepet", JSON.stringify(sepet));
+        let toplam = 0;
+        sepet.forEach((e) => {
+          toplam += e.quantity;
+        });
+        span.textContent = toplam;
+        let toplamSepetFiyati = 0;
+        sepet.forEach((e) => {
+          toplamSepetFiyati += e.fiyat * e.quantity;
+        });
+        sepetFiyat.textContent = toplamSepetFiyati.toFixed(2) + "$";
 
         // urun.fiyat += urun.quantity
         // price.textContent = urun.fiyat
       });
+
+      //*arttır butonu bitişi
 
       imgDiv.append(img);
 
@@ -227,6 +276,32 @@ if (window.location.href == "http://127.0.0.1:5500/index.html") {
 
       container.append(div);
     });
+    // sepetteki toplam fiyat kısmı
+    const hr = document.createElement("hr");
+    container.append(hr);
+
+    const fiyatDiv = document.createElement("div");
+    fiyatDiv.classList.add("w-100", "d-flex", "justify-content-around");
+
+    let sepetFiyat = document.createElement("h3");
+    let toplamSepetFiyati = 0;
+    sepet.forEach((e) => {
+      toplamSepetFiyati += e.fiyat * e.quantity;
+    });
+    sepetFiyat.textContent = toplamSepetFiyati.toFixed(2) + "$";
+
+    const sepetBtn = document.createElement("button");
+    sepetBtn.classList.add("btn", "btn-success", "w-50");
+    sepetBtn.textContent = "Satın Al";
+
+    sepetBtn.addEventListener("click", () => {
+      localStorage.setItem("sepet", JSON.stringify(sepet));
+      window.location.href = "http://127.0.0.1:5500/index.html";
+    });
+
+    fiyatDiv.append(sepetFiyat);
+    container.append(fiyatDiv);
+    fiyatDiv.append(sepetBtn);
   }
 }
 // localStorage.clear()
